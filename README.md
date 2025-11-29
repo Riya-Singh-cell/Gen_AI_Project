@@ -1,73 +1,105 @@
-# Welcome to your Lovable project
+🚀 Insight Finder
 
-## Project info
+Insight Finder is an AI-powered platform that helps users extract keywords & meaningful insights from unstructured text using Natural Language Processing (NLP) and Machine Learning.
+It provides a clean UI for entering text and returns refined keywords that help analyze opinions, research content, articles, or user-generated inputs.
 
-**URL**: https://lovable.dev/projects/10c14545-dfe2-4f59-a4ac-7e4c1ce96b50
+🧠 How It Works
+🔹 NLP + ML Used
+Component	Description
+spaCy	Used for tokenization, part-of-speech tagging, and keyword extraction logic.
+Python-based ML logic	Custom keyword extraction using rule-based + statistical NLP techniques.
+Backend (Flask)	API endpoint /extract_keywords handles NLP model processing.
+Frontend (React + Vite)	Sends user input using Axios to backend and displays extracted keywords.
+📂 Project Structure
+insight-finder/
+│
+├── backend/
+│   ├── app.py                # Flask backend API
+│   ├── keyword_extractor.py  # NLP logic using spaCy
+│   ├── requirements.txt      # Backend dependencies
+│
+├── src/
+│   ├── components/
+│   │   └── KeywordExtractor.tsx  # React component for keyword extraction
+│   ├── App.tsx                  # Main routing and UI
+│   └── index.css               # Styling
+│
+├── package.json               # Frontend dependencies
+└── README.md                  # Project documentation
 
-## How can I edit this code?
+🛠️ Tech Stack
+🔹 Frontend
 
-There are several ways of editing your application.
+React + TypeScript + Vite
 
-**Use Lovable**
+Tailwind CSS
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/10c14545-dfe2-4f59-a4ac-7e4c1ce96b50) and start prompting.
+Framer Motion (animations)
 
-Changes made via Lovable will be committed automatically to this repo.
+Axios (API requests)
 
-**Use your preferred IDE**
+ShadCN UI components
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+🔹 Backend
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Python + Flask
 
-Follow these steps:
+spaCy (NLP library)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Custom ML logic (keyword extraction)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+📥 Installation & Setup
+1️⃣ Backend Setup
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
 
-# Step 3: Install the necessary dependencies.
-npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Backend runs on: http://127.0.0.1:5000
+
+2️⃣ Frontend Setup
+npm install
 npm run dev
-```
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Frontend runs on: http://localhost:8080
 
-**Use GitHub Codespaces**
+🔗 API Endpoint
+POST /extract_keywords
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Request Body:
 
-## What technologies are used for this project?
+{
+  "text": "Artificial Intelligence improves decision-making globally"
+}
 
-This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Response:
 
-## How can I deploy this project?
+{
+  "keywords": ["Artificial Intelligence", "decision-making", "globally"]
+}
 
-Simply open [Lovable](https://lovable.dev/projects/10c14545-dfe2-4f59-a4ac-7e4c1ce96b50) and click on Share -> Publish.
+🎯 Features
 
-## Can I connect a custom domain to my Lovable project?
+✔️ Extracts keywords from large text input
+✔️ Animation-based UI feedback
+✔️ Handles error if user submits empty input
+✔️ Clean UI with responsive design
+✔️ Fully decoupled frontend & backend architecture
 
-Yes, you can!
+🧩 Future Enhancements
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Sentiment Analysis
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Topic Categorization
+
+Integration of Deep Learning model (BERT)
+
+Support for multiple languages
+
+📝 Notes
+
+❗ Don’t push venv/, node_modules/, or large ML files to Git. Use .gitignore and keep only requirements.txt and package.json.
