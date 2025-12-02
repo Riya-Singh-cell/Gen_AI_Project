@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Keyword Extractor</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      width: 320px;
+      padding: 0;
+      margin: 0;
+      background-color: #2F3E46;
+      color: #CAD2C5;
+      overflow: hidden;
+    }
+
+    .container {
+      padding: 20px;
+      background: linear-gradient(160deg, #2F3E46 0%, #354F52 100%);
+      min-height: 100vh;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(84, 121, 111, 0.3);
+      position: relative;
+    }
+
+    .header h2 {
+      margin: 0 0 8px 0;
+      font-size: 22px;
+      font-weight: 600;
+      color: #CAD2C5;
+      letter-spacing: 0.5px;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 25%;
+      width: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #84A98C, transparent);
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #84A98C;
+      margin: 0;
+      font-weight: 400;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #84A98C;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    #count {
+      width: 100%;
+      padding: 12px 16px;
+      padding-left: 40px;
+      border: 1px solid #52796F;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      background-color: rgba(132, 169, 140, 0.1);
+      color: #CAD2C5;
+      font-weight: 500;
+    }
+
+    #count:focus {
+      outline: none;
+      border-color: #84A98C;
+      box-shadow: 0 0 0 2px rgba(132, 169, 140, 0.3);
+      background-color: rgba(132, 169, 140, 0.15);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #84A98C;
+      font-weight: bold;
+    }
+
+    #extract {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #52796F 0%, #354F52 100%);
+      color: #CAD2C5;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(42, 57, 66, 0.4);
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #extract:hover {
+      background: linear-gradient(135deg, #84A98C 0%, #52796F 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(42, 57, 66, 0.5);
+      color: #2F3E46;
+    }
+
+    #extract:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(42, 57, 66, 0.4);
+    }
+
+    #extract::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.7s ease;
+    }
+
+    #extract:hover::after {
+      left: 100%;
+    }
+
+    .keywords-container {
+      background-color: rgba(53, 79, 82, 0.4);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(84, 121, 111, 0.3);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .keywords-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .keywords-header h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: #CAD2C5;
+    }
+
+    .keywords-count {
+      font-size: 13px;
+      background-color: #52796F;
+      color: #CAD2C5;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    #keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-height: 180px;
+      overflow-y: auto;
+      padding: 12px 8px;
+      background-color: rgba(42, 57, 66, 0.5);
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    .tag {
+      padding: 8px 14px;
+      background: linear-gradient(135deg, #354F52 0%, #52796F 100%);
+      border-radius: 20px;
+      font-size: 13px;
+      border: none;
+      color: #CAD2C5;
+      display: inline-block;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tag:hover {
+      background: linear-gradient(135deg, #84A98C 0%, #52796F 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      color: #2F3E46;
+    }
+
+    .tag:active {
+      transform: translateY(0);
+    }
+
+    .instructions {
+      margin-top: 18px;
+      font-size: 12px;
+      text-align: center;
+      color: #84A98C;
+      font-style: italic;
+      padding: 10px;
+      border-top: 1px solid rgba(84, 121, 111, 0.3);
+    }
+
+    #keywords::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #keywords::-webkit-scrollbar-thumb {
+      background: #52796F;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Keyword Extractor</h2>
+      <p class="subtitle">Extract and manage keywords from any page</p>
+    </div>
+
+    <div class="form-group">
+      <label for="count">Number of keywords to extract</label>
+      <div class="input-wrapper">
+        <span class="input-icon">#</span>
+        <input id="count" type="number" min="1" max="50" value="10" />
+      </div>
+    </div>
+
+    <button id="extract">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 8px;">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+      Extract Keywords
+    </button>
+
+    <div class="keywords-container">
+      <div class="keywords-header">
+        <h3>Extracted Keywords</h3>
+        <div class="keywords-count" id="keywordCount">0</div>
+      </div>
+
+      <div id="keywords"></div>
+    </div>
+
+    <p class="instructions">Click on any keyword to highlight it on the page</p>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
